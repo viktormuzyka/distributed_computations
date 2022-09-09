@@ -106,12 +106,13 @@ class TThread extends Thread {
         if (!semaphore.compareAndSet(0, 1)){
             return;
         }
+        boolean flag = (slider.getValue() == 10 && step > 0) || (slider.getValue() == 90 && step<0);
 
         while(!isInterrupted()) {
             try {
-                sleep(400);
+                sleep(200);
                 int sliderValue = slider.getValue();
-                if (sliderValue > 10 && sliderValue < 90) {
+                if ((sliderValue > 10 && sliderValue < 90) || flag) {
                     slider.setValue(sliderValue + step);
                 }
             } catch (InterruptedException e) {
