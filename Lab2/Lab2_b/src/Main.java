@@ -4,7 +4,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 class Manager {
-    private static int NUMBER_OF_GOODS = 1000;
+    private static int NUMBER_OF_GOODS = 10;
     private static int totalPrice = 0;
     private static Instant start;
 
@@ -61,7 +61,8 @@ class Manager {
     private static void producer() throws InterruptedException {
         while (!warehouse.isEmpty()) {
             wheelBarrow.put(warehouse.take());
-            Thread.currentThread().sleep(1);
+            System.out.println("producer " );
+            Thread.currentThread().sleep(1000);
         }
 
     }
@@ -69,7 +70,8 @@ class Manager {
     private static void consumerProducer() throws InterruptedException {
         while (true) {
             automobile.put(wheelBarrow.take());
-            Thread.currentThread().sleep(1);
+            System.out.println("consumerProducer " );
+            Thread.currentThread().sleep(2000);
 
             if (warehouse.isEmpty() && wheelBarrow.isEmpty()) {
                 break;
@@ -80,8 +82,8 @@ class Manager {
     private static void consumer() throws InterruptedException {
         while (true) {
             totalPrice += automobile.take().getPrice();
-            //System.out.println("Total price is " + totalPrice);
-            Thread.currentThread().sleep(1);
+            System.out.println("consumer " );
+            Thread.currentThread().sleep(3000);
 
             if (warehouse.isEmpty() && automobile.isEmpty() && wheelBarrow.isEmpty()) {
                 break;
