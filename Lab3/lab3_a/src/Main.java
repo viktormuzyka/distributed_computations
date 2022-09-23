@@ -22,50 +22,50 @@ public class Main {
 class Bucket {
     private final int maxCapacity;
     private int currCapacity;
-    final Object fullMonitor = new Object();
-    final Object emptyMonitor = new Object();
+    private final Object monitoringFull = new Object();
+    private final Object monitoringEmpty = new Object();
 
     public Bucket(int maxCapacity) {
         this.maxCapacity = maxCapacity;
         this.currCapacity = 0;
     }
 
-    public void waitFull() {
-        synchronized (fullMonitor) {
+    public void waitOnFull() {
+        synchronized (monitoringFull) {
             try {
-                fullMonitor.wait();
+                monitoringFull.wait();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void notifyFull() {
-        synchronized (fullMonitor) {
-            fullMonitor.notifyAll();
+    public void notifyOnFull() {
+        synchronized (monitoringFull) {
+            monitoringFull.notifyAll();
         }
     }
 
-    public void waitEmpty() {
-        synchronized (emptyMonitor) {
+    public void waitOnEmpty() {
+        synchronized (monitoringEmpty) {
             try {
-                emptyMonitor.wait();
+                monitoringEmpty.wait();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void notifyEmpty() {
-        synchronized (emptyMonitor) {
-            emptyMonitor.notifyAll();
+    public void notifyOnEmpty() {
+        synchronized (monitoringEmpty) {
+            monitoringEmpty.notifyAll();
         }
     }
 
     public void fill() {
         if(checkAndFill()) {
             System.out.println("Bee is waiting");
-            waitEmpty();
+            waitOnEmpty();
             fill();
         }
     }
@@ -76,7 +76,7 @@ class Bucket {
             System.out.println(++currCapacity);
 
             if(isFull()) {
-                notifyFull();
+                notifyOnFull();
             }
         } else {
             return true;
@@ -100,7 +100,7 @@ class Bucket {
             currCapacity = 0;
         }
 
-        notifyEmpty();
+        notifyOnEmpty();
     }
 }
 class Bee implements Runnable {
@@ -132,7 +132,7 @@ class Bear implements Runnable {
     @Override
     public void run() {
         while(true) {
-            pot.waitFull();
+            pot.waitOnFull();
             System.out.println("Bear woke up");
             pot.eatHoney();
             System.out.println("Bear ate honey");
