@@ -1,2 +1,4 @@
-# java_univ
-java_univ
+# distributed_computations
+
+distributed_computations
+
