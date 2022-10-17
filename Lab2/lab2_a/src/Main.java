@@ -3,7 +3,7 @@ public class Main {
     static final int NUMBER_OF_THREADS = 4;
 
     public static void main(String[] args) {
-        ForestScheduler scheduler = new ForestScheduler(100, 10);
+        ForestScheduler scheduler = new ForestScheduler(100, 100);
         Thread[] threads = startThreads(scheduler);
 
         for(Thread t : threads) {
