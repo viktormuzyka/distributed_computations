@@ -1,0 +1,13 @@
+<!ELEMENT Showsalon (Manufacture*)>
+        <!ELEMENT Manufacture (Brand*)>
+        <!ELEMENT Brand (#PCDATA)>
+        <!ATTLIST Manufacture
+                id CDATA #REQUIRED
+                name CDATA #REQUIRED
+                >
+        <!ATTLIST Brand
+                id CDATA #REQUIRED
+                manufactureID CDATA #REQUIRED
+                name CDATA #REQUIRED
+                price CDATA #REQUIRED
+                >

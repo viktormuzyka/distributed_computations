@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE Showsalon SYSTEM "manufacture.dtd">
+<Showsalon>
+    <Manufacture id="1" name="WAG GROUP">
+        <Brand id="11" name="Volkswagen" price="500" manufactureID="1"/>
+        <Brand id="12" name="Audi" price="1000" manufactureID="1"/>
+        <Brand id="13" name="Lamborghini" price="300" manufactureID="1"/>
+        <Brand id="14" name="Bentley" price="5000" manufactureID="1"/>
+        <Brand id="15" name="Porsche" price="1000" manufactureID="1"/>
+        <Brand id="16" name="Ducati" price="3000" manufactureID="1"/>
+    </Manufacture>
+    <Manufacture id="2" name="TOYOTA GROUP">
+        <Brand id="21" name="Daihatsu" price="5" manufactureID="2"/>
+        <Brand id="22" name="Hino" price="10" manufactureID="2"/>
+        <Brand id="23" name="Lexus" price="30" manufactureID="2"/>
+        <Brand id="24" name="Toyota" price="50" manufactureID="2"/>
+    </Manufacture>
+</Showsalon>
