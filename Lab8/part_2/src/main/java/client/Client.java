@@ -1,113 +1,39 @@
 package client;
 
-import models.*;
-import util.IoUtils;
+import models.Manufacture;
+import models.Brand;
+import rmi.RmiServer;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class Client {
-    private Socket socket;
-    private final String host;
-    private final int port;
-    private DataInputStream in;
-    private DataOutputStream out;
+    public static void main(String[] args)
+            throws MalformedURLException, NotBoundException, RemoteException, InterruptedException {
+        RmiServer server = (RmiServer) Naming.lookup("//localhost:22222/server");
 
-    public Client(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
+        System.out.println("Connected");
+        boolean res;
+        res = server.deleteBrand(3);
+        System.out.println("Delete brand with id 3 " + res);
+        res = server.deleteBrand(6);
+        System.out.println("Delete brand with id 6 " + res);
+        res = server.deleteManufacture(3);
+        System.out.println("Delete manufacture with id 3 " + res);
+        res = server.insertBrand(new Brand(11, 2, "OPRST", 12323));
+        System.out.println("Insert new brand " + res);
+        res = server.updateBrand(new Brand(1, 1, "OPRST V2", 1000));
+        System.out.println("Update brand with id 1, set name OPRST V2 and price 1000 " + res);
+        res =  server.insertManufacture(new Manufacture(4, "VOLUN AUTO"));
+        System.out.println("Insert manufacture VOLUN AUTO " + res);
+        res = server.moveToAnotherManufacture(1, 4);
+        System.out.println("Move brand with id 1 to manufacture VOLUN AUTO " + res);
+        System.out.println(server.findBrandsByManufactureName("TOYOTA GROUP"));
+        System.out.println("Find brands for TOYOTA GROUP");
 
-    public void connect() throws IOException {
-        socket = new Socket(host, port);
-        in = new DataInputStream(socket.getInputStream());
-        out = new DataOutputStream(socket.getOutputStream());
-    }
-
-    public void disconnect() throws IOException {
-        socket.close();
-    }
-
-    public boolean insertManufacture(Manufacture manufacture) throws IOException {
-        IoUtils.writeString(out, "insertManufacture");
-        IoUtils.writeManufacture(out, manufacture);
-
-        return in.readBoolean();
-    }
-
-    public boolean deleteManufacture(int id) throws IOException {
-        IoUtils.writeString(out, "deleteManufacture");
-        out.writeInt(id);
-
-        return in.readBoolean();
-    }
-
-    public boolean insertBrand(Brand brand) throws IOException {
-        IoUtils.writeString(out, "insertBrand");
-        IoUtils.writeBrand(out, brand);
-
-        return in.readBoolean();
-    }
-
-    public boolean deleteBrand(int id) throws IOException {
-        IoUtils.writeString(out, "deleteBrand");
-        out.writeInt(id);
-
-        return in.readBoolean();
-    }
-
-    public boolean updateBrand(Brand brand) throws IOException {
-        IoUtils.writeString(out, "updateBrand");
-        IoUtils.writeBrand(out, brand);
-
-        return in.readBoolean();
-    }
-
-    public boolean moveToAnotherManufacture(int brandId, int newManufactureId) throws IOException {
-        IoUtils.writeString(out, "moveToAnotherManufacture");
-        out.writeInt(brandId);
-        out.writeInt(newManufactureId);
-
-        return in.readBoolean();
-    }
-
-    public List<Brand> findBrandsByManufactureName(String manufactureName) throws IOException {
-        IoUtils.writeString(out, "findBrandsByManufactureName");
-        IoUtils.writeString(out, manufactureName);
-
-        return readBrands();
-    }
-
-    public List<Manufacture> findAllManufactures() throws IOException {
-        IoUtils.writeString(out, "findAllManufactures");
-
-        return readManufactures();
-    }
-
-    private List<Brand> readBrands() throws IOException {
-        List<Brand> result = new ArrayList<>();
-        int listSize = in.readInt();
-
-        for (int i = 0; i < listSize; i++) {
-            result.add(IoUtils.readBrand(in));
-        }
-
-        return result;
-    }
-
-    private List<Manufacture> readManufactures() throws IOException {
-        List<Manufacture> result = new ArrayList<>();
-        int listSize = in.readInt();
-        System.out.println(listSize);
-
-        for (int i = 0; i < listSize; i++) {
-            result.add(IoUtils.readManufacture(in));
-        }
-
-        return result;
+        System.out.println(server.findAllManufactures());
+        System.out.println("Find all manufactures");
     }
 }

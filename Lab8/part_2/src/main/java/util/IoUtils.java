@@ -1,11 +1,11 @@
 package util;
 
-import models.*;
+import models.Brand;
+import models.Manufacture;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 import static java.lang.String.join;
 
